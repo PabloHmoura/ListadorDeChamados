@@ -1,0 +1,22 @@
+#tableContent{
+    padding-left: 40%;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    transition: .5s;
+    font-size: 1rem;
+    
+}
+
+@media(min-width: 1024px){
+    #tableContent{
+        padding-left: 0%;
+        width: 80vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+    }
+}
