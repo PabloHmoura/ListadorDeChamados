@@ -1,59 +1,55 @@
 package br.com.pablo.chamados.model;
 
-import br.com.pablo.chamados.parser.JsonParser;
+import br.com.pablo.chamados.dto.QtdPorLocalidadeDto;
+import br.com.pablo.chamados.mapper.ChamadoMapper;
+import br.com.pablo.chamados.repository.Connection;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.util.*;
 
 @Service
 public class ChamadoService {
-    public List<Chamado> listar() throws IOException, InterruptedException, ParseException {
 
-        String url = "http://localhost:5000/dados";
-        URI endereco = URI.create(url);
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder(endereco).GET().build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-        String body = response.body();
-        JsonParser jsonParser = new JsonParser();
-        List<Map<String, String>> listaChamados = jsonParser.parse(body);
-        System.out.println("Total de chamados: " + listaChamados.size());
+    Connection connection;
+    ChamadoMapper chamados;
 
-        List<Chamado> chamados = new ArrayList<>();
+    public ChamadoService (Connection connection, ChamadoMapper chamadoMapper){
+        this.connection = connection;
+        this.chamados = chamadoMapper;
+    }
+    public List<Chamado> listar() throws IOException, InterruptedException {
 
-        for (Map<String, String> chamadoMap : listaChamados) {
-            Chamado chamado = new Chamado();
-            chamado.setAtribuidoGrupoTecnico(chamadoMap.get("Atribuído - Grupo técnico"));
-            chamado.setAtribuidoTecnico(chamadoMap.get("Atribuído - Técnico"));
-            chamado.setCategoria(chamadoMap.get("Categoria"));
-            chamado.setDataSolucao(chamadoMap.get("Data da solução"));
-            chamado.setDataAbertura(chamadoMap.get("Data de abertura"));
-            chamado.setDescricao(chamadoMap.get("Descrição"));
-            chamado.setId(chamadoMap.get("ID"));
-            chamado.setTitulo(chamadoMap.get("Título"));
-            chamado.setStatus(chamadoMap.get("Status"));
-            chamado.setTempoAtendimentoProgresso(chamadoMap.get("Tempo para atendimento + Progresso"));
-            chamado.setTempoSolucaoProgresso(chamadoMap.get("Tempo para solução + Progresso"));
-            chamado.setRequerente(chamadoMap.get("Requerente - Requerente"));
+        List<Map<String, String>> listaChamados = connection.conection();
 
-            chamado.setPrioridade(chamadoMap.get("Prioridade"));
-            chamado.setUrgencia(chamadoMap.get("Urgência"));
 
-            chamado.setLocalizacao(chamadoMap.get("Localização"));
-            chamado.setImpacto(chamadoMap.get("Impacto"));
-            chamado.setSolucao(chamadoMap.get("Solução - Solução"));
-            chamado.setUltimaAtualizacao(chamadoMap.get("Última atualização"));
+        return chamados.listaDeChamados(listaChamados);
+    }
 
-            chamados.add(chamado);
+    public List<QtdPorLocalidadeDto> listarLocalidadesPorChamado() throws IOException, InterruptedException {
+        List<Map<String, String>> listaChamados = connection.conection();
+        List<QtdPorLocalidadeDto> listaDeChamado = new ArrayList<>();
+
+        String localizacao = null;
+        String localizacaoAtual = null;
+        for (Chamado chamado: chamados.listaChamadosOrdenados(listaChamados)) {
+            localizacaoAtual = chamado.getLocalizacao();
+            if (!Objects.equals(localizacao, chamado.getLocalizacao()) && listaChamados.size() > 1) {
+                QtdPorLocalidadeDto qtdPorLocalidadeDto = new QtdPorLocalidadeDto();
+                qtdPorLocalidadeDto.setLocalidade(chamado.getLocalizacao());
+                qtdPorLocalidadeDto.getChamados().add(chamado.getId());
+                listaDeChamado.add(qtdPorLocalidadeDto);
+            } else {
+                for (QtdPorLocalidadeDto item: listaDeChamado) {
+                    if (item.getLocalidade().equals(localizacaoAtual)) {
+                        item.getChamados().add(chamado.getId());
+                        item.setQuantidade(item.getChamados().size());
+                    }
+                }
+            }
+            localizacao = chamado.getLocalizacao();
         }
-
-        return chamados;
+        listaDeChamado.sort(Comparator.comparing(QtdPorLocalidadeDto::getQuantidade).reversed());
+        return listaDeChamado;
     }
 }
 

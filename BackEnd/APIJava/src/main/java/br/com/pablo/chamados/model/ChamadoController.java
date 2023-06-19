@@ -1,5 +1,6 @@
 package br.com.pablo.chamados.model;
 
+import br.com.pablo.chamados.dto.QtdPorLocalidadeDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,5 +29,14 @@ public class ChamadoController {
 
     public List<Chamado>retornaChamados() throws IOException, InterruptedException, ParseException {
         return chamadoService.listar();
+    }
+
+    @GetMapping(
+            value = "/localidades",
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public List<QtdPorLocalidadeDto> listarLocalidadesComMaiorChamados() throws IOException, InterruptedException {
+
+        return chamadoService.listarLocalidadesPorChamado();
     }
 }

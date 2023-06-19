@@ -25,6 +25,27 @@ public class Chamado {
     private String descricao;
     private String ultimaAtualizacao;
 
+    public Chamado() {
+        this.id = "____";
+        this.titulo = "___________";
+        this.status = "";
+        this.tempoAtendimentoProgresso = "";
+        this.tempoSolucaoProgresso = "";
+        this.requerente = "";
+        this.categoria = "____";
+        this.prioridade = "";
+        this.urgencia = "";
+        this.dataAbertura = "";
+        this.atribuidoGrupoTecnico = "";
+        this.atribuidoTecnico = "";
+        this.localizacao = "_________________";
+        this.impacto = "";
+        this.dataSolucao = "";
+        this.solucao = "";
+        this.descricao = "";
+        this.ultimaAtualizacao = "";
+    }
+
     @Override
     public String toString() {
         return "Chamado{" +
