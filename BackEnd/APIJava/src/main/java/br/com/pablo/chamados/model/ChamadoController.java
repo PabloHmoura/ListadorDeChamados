@@ -1,5 +1,6 @@
 package br.com.pablo.chamados.model;
 
+import br.com.pablo.chamados.dto.ChamadoPorRegiaoDto;
 import br.com.pablo.chamados.dto.QtdPorLocalidadeDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,5 +39,13 @@ public class ChamadoController {
     public List<QtdPorLocalidadeDto> listarLocalidadesComMaiorChamados() throws IOException, InterruptedException {
 
         return chamadoService.listarLocalidadesPorChamado();
+    }
+
+    @GetMapping(
+            value = "/regiao",
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public List<ChamadoPorRegiaoDto> listaPorRegiao () throws IOException, InterruptedException {
+        return chamadoService.listaChamadoPorRegiao();
     }
 }

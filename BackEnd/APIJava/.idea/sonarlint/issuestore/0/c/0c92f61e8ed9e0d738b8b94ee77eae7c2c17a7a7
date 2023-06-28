@@ -1,0 +1,15 @@
+
+o	java:S116"NRename this field "SUL" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(•ûåşûÿÿÿÿ8Ç³Îì1
+q	java:S116"PRename this field "LESTE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(šİ…¥ıÿÿÿÿ8È³Îì1
+m	java:S116"QRename this field "CENTRO" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(î§à8È³Îì1
+q	java:S116"PRename this field "NORTE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ïË¡êÿÿÿÿÿ8È³Îì1
+C
+java:S1170"!Make this final field static too.(•ûåşûÿÿÿÿ8È³Îì1
+C
+java:S1170"!Make this final field static too.(šİ…¥ıÿÿÿÿ8È³Îì1
+>
+java:S1170"!Make this final field static too.(î§à8È³Îì1
+C
+java:S1170"!Make this final field static too.(ïË¡êÿÿÿÿÿ8È³Îì1
+t
+java:S3776="RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ò›Ä‡şÿÿÿÿ8Ï³Îì1
